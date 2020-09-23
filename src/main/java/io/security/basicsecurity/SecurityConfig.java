@@ -1,11 +1,13 @@
 package io.security.basicsecurity;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
@@ -18,12 +20,15 @@ import java.io.IOException;
 @EnableWebSecurity //WebSecurityConfigurer을 임포트 받아 실행시키는 어노테이션이다. 이 어노테이션을 추가해야 웹보안이 활성화 된다.
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
+    @Autowired
+    UserDetailsService userDetailsService;
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .anyRequest().authenticated(); //anyRequest --> 모든 리퀘스트를 허락한다.
-        http
+                .anyRequest().authenticated() //anyRequest --> 모든 리퀘스트를 허락한다.
+        .and()
                 .formLogin()
                 //.loginPage("/loginPage") //이걸 주석처리하면 기본 loginPage로 간다
                 .defaultSuccessUrl("/")
@@ -45,6 +50,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         response.sendRedirect("/login");
                     }
                 })
-                .permitAll(); // 이 경로는 인증을 받지 않아도 다 허락한다.
+                .permitAll() // 이 경로는 인증을 받지 않아도 다 허락한다.
+        .and()
+                .rememberMe()
+                .rememberMeParameter("remember")
+                .tokenValiditySeconds(3600)
+                .userDetailsService(userDetailsService)
+                ;
+
+
     }
 }
