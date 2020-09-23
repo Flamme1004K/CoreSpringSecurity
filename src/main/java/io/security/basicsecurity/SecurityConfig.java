@@ -53,19 +53,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         response.sendRedirect("/login");
                     }
                 })
-<<<<<<< HEAD
                 .permitAll() // 이 경로는 인증을 받지 않아도 다 허락한다.
         .and()
-                .rememberMe()
-                .rememberMeParameter("remember")
-                .tokenValiditySeconds(3600)
-                .userDetailsService(userDetailsService)
-                ;
-
-
-=======
-                .permitAll(); // 이 경로는 인증을 받지 않아도 다 허락한다.
-        http
                 .logout()
                 .logoutUrl("/logout")
                 .logoutSuccessUrl("/login")
@@ -82,7 +71,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         response.sendRedirect("/login");
                     }
                 })
-                .deleteCookies("remember-me");
->>>>>>> b4ae925504995c69e2752c5e163f421c4f8a297a
+                .deleteCookies("remember-me")
+        .and()
+                .rememberMe()
+                .rememberMeParameter("remember")
+                .tokenValiditySeconds(3600)
+                .userDetailsService(userDetailsService)
+        ;
     }
 }
