@@ -76,6 +76,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .rememberMe()
                 .rememberMeParameter("remember")
                 .tokenValiditySeconds(3600)
-                .userDetailsService(userDetailsService);
+                .userDetailsService(userDetailsService)
+        .and() // 동시세션
+                .sessionManagement()
+                /*
+                .maximumSessions(1) // 동시 세션 제어 : 최대 새션 허용개수
+                .maxSessionsPreventsLogin(false) //ture : 인증을 실패하도록 만드는 전략 , false : 인증은 되 그 전 세션을 가진 사람은 세션이 끊김
+                 */
+                .sessionFixation().changeSessionId() // 세션 고정보호 chageSessionId가 기본값
+                ;
     }
 }
