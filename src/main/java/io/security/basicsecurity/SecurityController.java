@@ -15,4 +15,26 @@ public class SecurityController {
     public String loginPage(){
         return "loginPage";
     }
+    @GetMapping("/user")
+    public String userPage(){
+        return "user";
+    }
+    @GetMapping("/admin/pay")
+    public String adminPayPage(){
+        return "adminPay";
+    }
+    @GetMapping("/admin/**")
+    public String adminPage(){
+        return "admin";
+    }
+
+    @GetMapping("/denied")
+    public String denied(){
+        return "denied";
+    }
+
+    @GetMapping("/login")
+    public String login(){
+        return "login";
+    }
 }
