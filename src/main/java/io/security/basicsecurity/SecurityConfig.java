@@ -2,6 +2,7 @@ package io.security.basicsecurity;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -27,6 +28,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 @Configuration
+@Order(0)
 @EnableWebSecurity //WebSecurityConfigurer을 임포트 받아 실행시키는 어노테이션이다. 이 어노테이션을 추가해야 웹보안이 활성화 된다.
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
@@ -51,7 +53,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/user").hasRole("USER")
                 .antMatchers("/admin/pay").hasRole("ADMIN")
                 .antMatchers("/admin/**").access("hasRole('ADMIN') or hasRole('SYS')")
-                .anyRequest().authenticated() //anyRequest --> 모든 리퀘스트를 허락한다.
+                .anyRequest()
+                .authenticated() //anyRequest --> 모든 리퀘스트를 허락한다.
         .and()
                 .formLogin()
                 //.loginPage("/loginPage") //이걸 주석처리하면 기본 loginPage로 간다
@@ -128,3 +131,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf(); // csrf Filter는 기본적으로 활성화 되어있다.
     }
 }
+// Security 다중보안설정
+//@Configuration
+//@Order(1)
+//class SecurityConfig2 extends WebSecurityConfigurerAdapter {
+//    protected void configure(HttpSecurity http) throws Exception {
+//        http.authorizeRequests().anyRequest().permitAll().and().formLogin();
+//    }
+//}
